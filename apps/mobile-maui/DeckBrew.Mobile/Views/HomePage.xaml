@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             x:Class="DeckBrew.Mobile.Views.HomePage"
+             Title="DeckBrew AI">
+  <ScrollView>
+    <VerticalStackLayout Padding="16" Spacing="12">
+      <Label Text="Generar mazo" FontAttributes="Bold" FontSize="24"/>
+      <Picker x:Name="FormatPicker" Title="Formato">
+        <Picker.Items>
+          <x:String>Standard</x:String>
+          <x:String>Modern</x:String>
+          <x:String>Commander</x:String>
+        </Picker.Items>
+      </Picker>
+      <Entry x:Name="ColorsEntry" Placeholder="Colores (ej: U,R)"/>
+      <Picker x:Name="StylePicker" Title="Estilo">
+        <Picker.Items>
+          <x:String>aggro</x:String>
+          <x:String>control</x:String>
+          <x:String>midrange</x:String>
+          <x:String>combo</x:String>
+        </Picker.Items>
+      </Picker>
+      <Entry x:Name="BudgetEntry" Placeholder="Presupuesto (opcional)" Keyboard="Numeric"/>
+      <Button Text="Generar" Clicked="OnGenerateClicked" />
+      <CollectionView x:Name="CardsList">
+        <CollectionView.ItemTemplate>
+          <DataTemplate>
+            <Grid ColumnDefinitions="2*,auto" Padding="4">
+              <Label Text="{Binding name}"/>
+              <Label Text="{Binding count}" Grid.Column="1" HorizontalTextAlignment="End"/>
+            </Grid>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </VerticalStackLayout>
+  </ScrollView>
+</ContentPage>

@@ -1,0 +1,10 @@
+bin/
+obj/
+**/*.user
+**/*.suo
+**/*.swp
+**/*.csproj.user
+**/*.db
+Platforms/**/bin/
+Platforms/**/obj/
+logs/
