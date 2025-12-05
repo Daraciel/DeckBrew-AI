@@ -31,8 +31,7 @@ app.MapPost("/generate", (GenerationRequest req, IValidator<GenerationRequest> v
     );
     return Results.Ok(deck);
 })
-.WithName("GenerateDeck")
-.WithOpenApi();
+.WithName("GenerateDeck");
 
 app.Run();
 

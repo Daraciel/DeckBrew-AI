@@ -10,11 +10,10 @@ namespace DeckBrew.Mobile.Views
         private readonly IDeckbrewApi _api;
         public ObservableCollection<CardSlotDto> Cards { get; } = new();
 
-        public HomePage()
+        public HomePage(IDeckbrewApi api)
         {
             InitializeComponent();
-            _api = Handler?.MauiContext?.Services.GetService(typeof(IDeckbrewApi)) as IDeckbrewApi
-                   ?? throw new InvalidOperationException("API client not resolved");
+            _api = api ?? throw new InvalidOperationException("API client not resolved");
             CardsList.ItemsSource = Cards;
         }
 

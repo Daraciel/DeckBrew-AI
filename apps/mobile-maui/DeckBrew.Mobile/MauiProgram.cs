@@ -16,11 +16,12 @@ namespace DeckBrew.Mobile
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>();
 
-            var apiUrl = Environment.GetEnvironmentVariable("DECKBREW_API_URL") ?? "http://localhost:8080";
+            var apiUrl = Environment.GetEnvironmentVariable("DECKBREW_API_URL") ?? "http://localhost:8100";
             builder.Services.AddRefitClient<IDeckbrewApi>()
                    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler())
                    .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiUrl));
 
+            builder.Services.AddTransient<Views.HomePage>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
