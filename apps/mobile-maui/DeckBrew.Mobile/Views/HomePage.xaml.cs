@@ -1,16 +1,18 @@
 using Microsoft.Maui.Controls;
-using DeckBrew.Mobile.Services;
+using DeckBrew.Contracts; // Usar el contrato compartido
+using DeckBrew.Contracts.DTOs;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace DeckBrew.Mobile.Views
 {
     public partial class HomePage : ContentPage
     {
-        private readonly IDeckbrewApi _api;
+        private readonly IDeckBrewApi _api;
         public ObservableCollection<CardSlotDto> Cards { get; } = new();
 
-        public HomePage(IDeckbrewApi api)
+        public HomePage(IDeckBrewApi api)
         {
             InitializeComponent();
             _api = api ?? throw new InvalidOperationException("API client not resolved");
@@ -19,18 +21,21 @@ namespace DeckBrew.Mobile.Views
 
         private async void OnGenerateClicked(object sender, EventArgs e)
         {
-            var req = new GenerationRequest
+            var request = new GenerateDeckRequest
             {
-                format = FormatPicker.SelectedItem?.ToString() ?? "Standard",
-                colors = (ColorsEntry.Text ?? "U").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
-                style = StylePicker.SelectedItem?.ToString() ?? "midrange",
-                budget = double.TryParse(BudgetEntry.Text, out var b) ? b : null
+                Request = new GenerationRequestDto
+                {
+                    Format = FormatPicker.SelectedItem?.ToString() ?? "Standard",
+                    Colors = (ColorsEntry.Text ?? "U").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+                    Style = StylePicker.SelectedItem?.ToString() ?? "midrange",
+                    Budget = double.TryParse(BudgetEntry.Text, out var b) ? b : null
+                }
             };
 
-            var command = new GenerateDeckCommand { request = req };
-            var deck = await _api.GenerateAsync(command);
+            var response = await _api.GenerateDeckAsync(request);
             Cards.Clear();
-            foreach (var c in deck.cards) Cards.Add(c);
+            foreach (var c in response.Cards) 
+                Cards.Add(c);
         }
     }
 }

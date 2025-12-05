@@ -6,6 +6,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DeckBrew.Application\DeckBrew.Application.csproj" />
     <ProjectReference Include="..\DeckBrew.Infrastructure\DeckBrew.Infrastructure.csproj" />
+    <ProjectReference Include="..\DeckBrew.Contracts\DeckBrew.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />

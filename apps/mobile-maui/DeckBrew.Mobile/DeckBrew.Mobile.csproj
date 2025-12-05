@@ -28,4 +28,8 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
+  <!-- Agregar referencia al proyecto de contratos -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\DeckBrew.Contracts\DeckBrew.Contracts.csproj" />
+  </ItemGroup>
 </Project>
