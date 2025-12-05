@@ -1,7 +1,11 @@
 using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using DeckBrew.Mobile.Services;
+using System;
+using System.Net.Http;
 
 namespace DeckBrew.Mobile
 {
@@ -14,6 +18,7 @@ namespace DeckBrew.Mobile
 
             var apiUrl = Environment.GetEnvironmentVariable("DECKBREW_API_URL") ?? "http://localhost:8080";
             builder.Services.AddRefitClient<IDeckbrewApi>()
+                   .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler())
                    .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiUrl));
 
 #if DEBUG

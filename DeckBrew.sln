@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{5854FF58-B8C5-05C6-5BF2-ACE42193F22B}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeckBrew.Api", "services\deckbrew.api\DeckBrew.Api.csproj", "{1388ACE4-3281-4896-9111-F06E0E6A78E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeckBrew.Mobile", "apps\mobile-maui\DeckBrew.Mobile\DeckBrew.Mobile.csproj", "{99070493-5ECB-417F-B72C-255E575A6FCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deckbrew.apps", "deckbrew.apps", "{4FF6073C-D0A8-4EF6-98DA-A9A6361275F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5CAD3006-7990-217F-1167-A5725FA08C97} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
 		{1388ACE4-3281-4896-9111-F06E0E6A78E7} = {5CAD3006-7990-217F-1167-A5725FA08C97}
-		{99070493-5ECB-417F-B72C-255E575A6FCB} = {5CAD3006-7990-217F-1167-A5725FA08C97}
+		{99070493-5ECB-417F-B72C-255E575A6FCB} = {4FF6073C-D0A8-4EF6-98DA-A9A6361275F1}
+		{4FF6073C-D0A8-4EF6-98DA-A9A6361275F1} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
 	EndGlobalSection
 EndGlobal

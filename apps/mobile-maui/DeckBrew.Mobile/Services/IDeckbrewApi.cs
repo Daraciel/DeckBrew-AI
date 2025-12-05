@@ -1,4 +1,5 @@
 using Refit;
+using System;
 using System.Threading.Tasks;
 
 namespace DeckBrew.Mobile.Services

@@ -8,3 +8,4 @@ obj/
 Platforms/**/bin/
 Platforms/**/obj/
 logs/
+.vs/

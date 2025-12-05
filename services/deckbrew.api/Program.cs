@@ -1,7 +1,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -20,13 +22,13 @@ app.MapPost("/generate", (GenerationRequest req, IValidator<GenerationRequest> v
     var result = validator.Validate(req);
     if (!result.IsValid) return Results.BadRequest(result.Errors);
 
-    var deck = new DeckResponse
-    {
-        cards = new[] { new CardSlotDto { name = "Island", count = 20 } },
-        keyCards = new[] { new KeyCardDto { name = "Example Card", rationale = "Sinergia con control" } },
-        risks = new[] { "Maná base mejorable" },
-        mulligan = "Mantén manos con 2-3 tierras."
-    };
+    // Reemplaza la inicialización de DeckResponse usando el constructor con todos los argumentos requeridos
+    var deck = new DeckResponse(
+        new[] { new CardSlotDto("Island", 20) },
+        new[] { new KeyCardDto("Example Card", "Sinergia con control") },
+        new[] { "Maná base mejorable" },
+        "Mantén manos con 2-3 tierras."
+    );
     return Results.Ok(deck);
 })
 .WithName("GenerateDeck")
