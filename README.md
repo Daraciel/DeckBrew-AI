@@ -2,12 +2,8 @@
 
 Asistente de **deckbuilding** para *Magic: The Gathering* que genera mazos **legales** y **explicados** a partir de un brief (formato, colores, estilo, presupuesto, meta local). Cliente **.NET MAUI** (Android/iOS/Windows) + Backend **ASP.NET Core** con arquitectura **Clean/Hexagonal**.
 
-> **Nota**: Este README está preparado para dos posibles estructuras que hemos utilizado en el proyecto:
->
-> - **Layout A (monorepo apps/services/infra)**: `apps/mobile-maui/DeckBrew.Mobile`, `services/deckbrew.api`, `infra/`.
-> - **Layout B (Clean Architecture)**: `src/DeckBrew.*` (Domain, Application, Infrastructure, Api, Workers), `clients/DeckBrew.Mobile`, `infra/`.
->
-> Ajusta los comandos a la ruta que corresponda en tu repo. Si tu estructura difiere, abre un issue o comparte el árbol (`tree -L 3`) y actualizo este README.
+> **Nota**: El proyecto ha sido refactorizado siguiendo el **Layout B (Clean Architecture)** como se describe a continuación.
+> Para información sobre la migración desde Layout A, consulta [MIGRATION.md](MIGRATION.md).
 
 ---
 
@@ -22,9 +18,7 @@ Asistente de **deckbuilding** para *Magic: The Gathering* que genera mazos **leg
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Requisitos](#requisitos)
 - [Ejecución en local](#ejecución-en-local)
-  - [Layout A](#layout-a-monorepo-appsservicesinfra)
-  - [Layout B](#layout-b-clean-architecture-src)
-- [Despliegue en Portainer](#despliegue-en-portainer)
+- [Despliegue en Docker](#despliegue-en-docker)
 - [Configuración (variables de entorno)](#configuración-variables-de-entorno)
 - [API (contratos y endpoints)](#api-contratos-y-endpoints)
 - [Datos e ingesta](#datos-e-ingesta)
@@ -62,137 +56,234 @@ Asistente de **deckbuilding** para *Magic: The Gathering* que genera mazos **leg
 
 ## Arquitectura
 ### Vista global
-Arquitectura **Clean/Hexagonal** con **CQRS** ligero:
+Arquitectura **Clean/Hexagonal** con **separación de capas**:
 - **Domain**: entidades y puertos del dominio; sin dependencias.
-- **Application**: casos de uso (Commands/Queries) y orquestación.
+- **Application**: casos de uso (Commands/Handlers) y orquestación.
 - **Infrastructure**: adaptadores (datos, LLM, vector DB, motor de reglas).
-- **Delivery**: **API** (Minimal APIs/OpenAPI) y **Workers** (ingesta/reindexado).
-- **Client**: **.NET MAUI** consumiendo **OpenAPI**.
+- **Api**: **Minimal APIs** con OpenAPI/Swagger.
+- **Mobile**: **.NET MAUI** consumiendo API REST.
 
 ### Backend
-- ASP.NET Core Minimal API + OpenAPI.
-- MediatR (o DI nativa) para orquestar casos de uso.
+- ASP.NET Core 10 con Minimal API + OpenAPI.
+- Inyección de dependencias nativa para orquestar casos de uso.
 - Reglas de formato/curva/presupuesto/colores.
-- Embeddings para sinergia (FAISS/Weaviate/Pinecone).
+- Embeddings para sinergia (preparado para FAISS/Weaviate/Pinecone).
 - Observabilidad; UI OpenAPI sólo en Development.
 
 ### Frontend
 - .NET MAUI (Android/iOS/Windows), MVVM.
-- Cliente **OpenAPI** generado (NSwag/Kiota).
+- Cliente **Refit** para consumir API REST.
 - Persistencia local (SQLite/Preferences) y configuración `DECKBREW_API_URL`.
 
 ## Estructura del repositorio
 
-### Layout A (apps/services/infra)
-```
-DeckBrew-AI/
-├─ apps/
-│  └─ mobile-maui/
-│     └─ DeckBrew.Mobile/
-├─ services/
-│  ├─ deckbrew.api/
-│  ├─ deckbrew.data/
-│  └─ deckbrew.generator/
-└─ infra/
-   ├─ Dockerfile.api
-   └─ docker-compose.yaml
-```
-
-### Layout B (Clean Architecture)
+### Layout B (Clean Architecture) - **ACTUAL**
 ```
 DeckBrew-AI/
 ├─ src/
-│  ├─ DeckBrew.Domain/
-│  ├─ DeckBrew.Application/
-│  ├─ DeckBrew.Infrastructure/
-│  ├─ DeckBrew.Api/
-│  └─ DeckBrew.Workers.Ingest/
-├─ clients/
-│  └─ DeckBrew.Mobile/
-└─ infra/
-   ├─ Dockerfile.api
-   └─ docker-compose.yaml
+│  ├─ DeckBrew.Domain/          # Entidades, puertos (sin dependencias)
+│  ├─ DeckBrew.Application/     # Casos de uso, handlers, validadores
+│  ├─ DeckBrew.Infrastructure/  # Adaptadores (repos, rules, synergy)
+│  ├─ DeckBrew.Api/            # Minimal APIs, DI, OpenAPI
+│  └─ README.md
+├─ apps/
+│  └─ mobile-maui/
+│     └─ DeckBrew.Mobile/
+├─ Dockerfile
+├─ docker-compose.yml
+├─ MIGRATION.md                 # Guía de migración Layout A → B
+└─ README.md (este archivo)
 ```
 
 ## Requisitos
-- .NET SDK 9 (o 8 si el proyecto lo fija).
-- Docker/Portainer (despliegue API).
-- Emulador Android / Windows para MAUI.
+- .NET SDK 10.0+
+- Docker (opcional, para contenedores)
+- Visual Studio 2022 o VS Code
+- Emulador Android / iOS / Windows para MAUI
 
 ## Ejecución en local
 
-### Layout A (monorepo apps/services/infra)
-**API**
-```bash
-cd services/deckbrew.api
-dotnet restore
-ASPNETCORE_URLS=http://localhost:8080 dotnet run
-# OpenAPI UI (dev): http://localhost:8080/swagger
-```
-**MAUI**
-```bash
-cd apps/mobile-maui/DeckBrew.Mobile
-dotnet restore && dotnet build
-export DECKBREW_API_URL=http://localhost:8080
-# Ejecuta en emulador/dispositivo
-```
-
-### Layout B (Clean Architecture src)
-**API**
+### API (Backend)
 ```bash
 cd src/DeckBrew.Api
 dotnet restore
-ASPNETCORE_URLS=http://localhost:8080 dotnet run
-```
-**MAUI**
-```bash
-cd clients/DeckBrew.Mobile
-dotnet restore && dotnet build
-export DECKBREW_API_URL=http://localhost:8080
+dotnet run
+
+# API disponible en: http://localhost:8100
+# Swagger UI: http://localhost:8100/swagger
 ```
 
-## Despliegue en Portainer
+### Cliente MAUI
+```bash
+cd apps/mobile-maui/DeckBrew.Mobile
+dotnet restore
+dotnet build
+
+# Configurar URL del API (opcional, default: http://localhost:8100)
+export DECKBREW_API_URL=http://localhost:8100
+
+# Ejecutar en emulador o dispositivo
+dotnet run --framework net10.0-android   # Android
+dotnet run --framework net10.0-windows   # Windows
+```
+
+## Despliegue en Docker
+
+### Build y ejecución
+```bash
+# Build imagen
+docker-compose build
+
+# Ejecutar contenedor
+docker-compose up -d
+
+# API disponible en: http://localhost:8100
+```
+
+### Portainer
 1. Portainer → **Stacks** → *Add stack*.
-2. Pega `infra/docker-compose.yaml`.
-3. Deploy → API en `http://<host>:8080`.
-4. Configura `DECKBREW_API_URL` en la app.
+2. Pega contenido de `docker-compose.yml`.
+3. Deploy → API en `http://<host>:8100`.
+4. Configura `DECKBREW_API_URL` en la app móvil.
 
 ## Configuración (variables de entorno)
+
 **API**
 - `ASPNETCORE_ENVIRONMENT`: `Development|Production`
-- `DB_CONNECTION_STRING`: PostgreSQL/SQL Server
-- `LLM_PROVIDER`: `OpenAI|AzureOpenAI|Disabled`
-- `LLM_API_KEY`: clave del LLM
-- `VECTOR_DB_PROVIDER`: `FAISS|Weaviate|Pinecone`
-- `ALLOW_OPENAPI_UI`: `true` sólo en dev
+- `ASPNETCORE_URLS`: URL de escucha (default: `http://+:8100`)
+- `DB_CONNECTION_STRING`: PostgreSQL/SQL Server (futuro)
+- `LLM_PROVIDER`: `OpenAI|AzureOpenAI|Disabled` (futuro)
+- `LLM_API_KEY`: clave del LLM (futuro)
+- `VECTOR_DB_PROVIDER`: `FAISS|Weaviate|Pinecone` (futuro)
 
 **Cliente MAUI**
-- `DECKBREW_API_URL`: URL base del backend
+- `DECKBREW_API_URL`: URL base del backend (default: `http://localhost:8100`)
 
 ## API (contratos y endpoints)
+
 **Base**: `/v1`
-- `POST /generate` → body: `{ format, colors[], style, budget?, localMeta? }`
-  → `200`: `{ cards[], keyCards[], risks[], mulligan }`
-- `POST /swap` (fase 2)
-- `GET /decks/{id}` / `DELETE /decks/{id}` (si se persiste)
+
+### POST /v1/generate
+Genera un nuevo mazo basado en los parámetros.
+
+**Request:**
+```json
+{
+  "request": {
+    "format": "Standard",
+    "colors": ["U", "R"],
+    "style": "control",
+    "budget": 100.0,
+    "localMeta": null
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "cards": [
+    { "name": "Island", "count": 24 },
+    { "name": "Counterspell", "count": 4 }
+  ],
+  "keyCards": [
+    { "name": "Counterspell", "rationale": "Key card for the strategy" }
+  ],
+  "risks": ["Mana base might be too light"],
+  "mulligan": "Keep hands with 3-4 lands and at least one removal spell."
+}
+```
+
+### GET /v1/decks/{id}
+Obtiene un mazo guardado por ID.
+
+### DELETE /v1/decks/{id}
+Elimina un mazo por ID.
+
+### GET /v1/health
+Health check del servicio.
 
 ## Datos e ingesta
-- Fuente: Scryfall/MTG JSON.
-- Worker: descarga/normaliza/versiona; reindexa embeddings.
-- DB: PostgreSQL o SQL Server.
+- **Fuente**: Scryfall/MTG JSON.
+- **Worker** (futuro): descarga/normaliza/versiona; reindexa embeddings.
+- **DB** (futuro): PostgreSQL o SQL Server.
+- **Actual**: Repositorios in-memory para MVP.
 
 ## Calidad, observabilidad y CI
-- Tests de **Domain**/**Application**; integración de API.
-- OpenTelemetry/logs; OpenAPI UI sólo en dev.
-- GitHub Actions (sugerido): build/test y contenedor del API.
+
+### Testing (planificado)
+- Tests unitarios de Domain y Application
+- Tests de integración de API
+- Tests E2E de app móvil
+
+### Observabilidad (planificado)
+- OpenTelemetry (traces, metrics, logs)
+- Health checks avanzados
+- Swagger UI solo en Development
+
+### CI/CD (sugerido)
+- GitHub Actions: build/test en cada PR
+- Docker image build automático
+- Deploy a staging/prod
 
 ## Roadmap
-- [ ] Motor de reglas (legalidad/curva/presupuesto/colores).
-- [ ] Ingesta Scryfall/MTG JSON + persistencia.
-- [ ] Embeddings MVP y sugerencias de swap.
-- [ ] OpenAPI v1 estable + cliente MAUI generado.
-- [ ] Exportadores.
+
+### Fase 1: MVP (Completado) ✅
+- [x] Arquitectura Clean/Hexagonal
+- [x] Minimal APIs con OpenAPI
+- [x] Motor de reglas básico
+- [x] Repositorios in-memory
+- [x] Cliente MAUI conectado
+
+### Fase 2: Persistencia
+- [ ] Implementar repositorios SQL (PostgreSQL/SQL Server)
+- [ ] Entity Framework Core o Dapper
+- [ ] Migraciones de base de datos
+
+### Fase 3: Datos reales
+- [ ] Worker de ingesta Scryfall/MTG JSON
+- [ ] Normalización y persistencia de cartas
+- [ ] Actualización automática de datos
+
+### Fase 4: Sinergias
+- [ ] Implementar embeddings (OpenAI/Azure)
+- [ ] Vector DB (FAISS/Weaviate/Pinecone)
+- [ ] API de sugerencias de swap
+
+### Fase 5: Features avanzadas
+- [ ] Exportadores (Archidekt/TappedOut)
+- [ ] Análisis de meta local
+- [ ] Optimización de presupuesto
+
+### Fase 6: Testing y QA
+- [ ] Tests unitarios completos
+- [ ] Tests de integración
+- [ ] Tests E2E automatizados
+
+### Fase 7: Observabilidad
+- [ ] OpenTelemetry integrado
+- [ ] Dashboards de monitoring
+- [ ] Alertas y logging estructurado
 
 ## Licencia y avisos
 - Respetar términos de datasets/APIs; no redistribuir arte con copyright.
 - La IA **asiste**; no garantiza rendimiento competitivo.
+- Magic: The Gathering es marca registrada de Wizards of the Coast.
+
+---
+
+## Contribuir
+
+Para contribuir al proyecto:
+1. Fork el repositorio
+2. Crea una rama con tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Soporte
+
+Para preguntas, issues o sugerencias:
+- Abre un **Issue** en GitHub
+- Consulta [MIGRATION.md](MIGRATION.md) para detalles de arquitectura
+- Revisa [src/README.md](src/README.md) para documentación del backend

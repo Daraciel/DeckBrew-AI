@@ -6,8 +6,13 @@ namespace DeckBrew.Mobile.Services
 {
     public interface IDeckbrewApi
     {
-        [Post("/generate")]
-        Task<DeckResponse> GenerateAsync(GenerationRequest request);
+        [Post("/v1/generate")]
+        Task<DeckResponse> GenerateAsync([Body] GenerateDeckCommand request);
+    }
+
+    public class GenerateDeckCommand
+    {
+        public GenerationRequest request { get; set; } = new();
     }
 
     public class GenerationRequest

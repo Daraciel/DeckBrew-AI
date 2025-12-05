@@ -27,7 +27,8 @@ namespace DeckBrew.Mobile.Views
                 budget = double.TryParse(BudgetEntry.Text, out var b) ? b : null
             };
 
-            var deck = await _api.GenerateAsync(req);
+            var command = new GenerateDeckCommand { request = req };
+            var deck = await _api.GenerateAsync(command);
             Cards.Clear();
             foreach (var c in deck.cards) Cards.Add(c);
         }
