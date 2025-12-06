@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  deckbrew-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deckbrew-api:latest
+    container_name: deckbrew-api
+    ports:
+      - "8100:8100"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8100
+    restart: unless-stopped
+    networks:
+      - deckbrew-network
+
+networks:
+  deckbrew-network:
+    driver: bridge

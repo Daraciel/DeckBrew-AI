@@ -28,8 +28,8 @@
         <CollectionView.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="2*,auto" Padding="4">
-              <Label Text="{Binding name}"/>
-              <Label Text="{Binding count}" Grid.Column="1" HorizontalTextAlignment="End"/>
+              <Label Text="{Binding Name}"/>
+              <Label Text="{Binding Count}" Grid.Column="1" HorizontalTextAlignment="End"/>
             </Grid>
           </DataTemplate>
         </CollectionView.ItemTemplate>
