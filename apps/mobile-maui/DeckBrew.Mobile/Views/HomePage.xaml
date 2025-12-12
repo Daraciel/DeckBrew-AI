@@ -6,6 +6,7 @@
   <ScrollView>
     <VerticalStackLayout Padding="16" Spacing="12">
       <Label Text="Generar mazo" FontAttributes="Bold" FontSize="24"/>
+      
       <Picker x:Name="FormatPicker" Title="Formato">
         <Picker.Items>
           <x:String>Standard</x:String>
@@ -13,7 +14,154 @@
           <x:String>Commander</x:String>
         </Picker.Items>
       </Picker>
-      <Entry x:Name="ColorsEntry" Placeholder="Colores (ej: U,R)"/>
+
+      <Label Text="Selecciona colores:" FontAttributes="Bold"/>
+      <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+        <!-- Blanco -->
+        <Frame x:Name="WhiteFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="WhiteButton" 
+                  StyleId="WhiteButton"
+                  Text="W"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#F8F6D8"
+                  TextColor="#333"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+
+        <!-- Azul -->
+        <Frame x:Name="BlueFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="BlueButton" 
+                  StyleId="BlueButton"
+                  Text="U"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#0E68AB"
+                  TextColor="White"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+
+        <!-- Negro -->
+        <Frame x:Name="BlackFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="BlackButton" 
+                  StyleId="BlackButton"
+                  Text="B"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#150B00"
+                  TextColor="White"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+
+        <!-- Rojo -->
+        <Frame x:Name="RedFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="RedButton" 
+                  StyleId="RedButton"
+                  Text="R"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#D3202A"
+                  TextColor="White"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+
+        <!-- Verde -->
+        <Frame x:Name="GreenFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="GreenButton" 
+                  StyleId="GreenButton"
+                  Text="G"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#00733E"
+                  TextColor="White"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+
+        <!-- Incoloro -->
+        <Frame x:Name="ColorlessFrame"
+               HasShadow="True"
+               CornerRadius="35"
+               Padding="0"
+               Margin="5"
+               HeightRequest="70"
+               WidthRequest="70"
+               BackgroundColor="Transparent"
+               BorderColor="Transparent">
+          <Button x:Name="ColorlessButton" 
+                  StyleId="ColorlessButton"
+                  Text="C"
+                  FontSize="32"
+                  FontAttributes="Bold"
+                  BackgroundColor="#CAC5C0"
+                  TextColor="#333"
+                  WidthRequest="70"
+                  HeightRequest="70"
+                  CornerRadius="35"
+                  Clicked="OnColorButtonClicked"
+                  Padding="0"/>
+        </Frame>
+      </FlexLayout>
+
       <Picker x:Name="StylePicker" Title="Estilo">
         <Picker.Items>
           <x:String>aggro</x:String>
@@ -22,8 +170,11 @@
           <x:String>combo</x:String>
         </Picker.Items>
       </Picker>
+      
       <Entry x:Name="BudgetEntry" Placeholder="Presupuesto (opcional)" Keyboard="Numeric"/>
+      
       <Button Text="Generar" Clicked="OnGenerateClicked" />
+      
       <CollectionView x:Name="CardsList">
         <CollectionView.ItemTemplate>
           <DataTemplate>
