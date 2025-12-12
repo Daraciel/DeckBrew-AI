@@ -29,7 +29,7 @@ namespace DeckBrew.Mobile.Views
         };
 
         // Mapeo de botones a sus frames
-        private readonly Dictionary<string, Frame> _frameMapping = new();
+        private readonly Dictionary<string, View> _frameMapping = new();
 
         public HomePage(IDeckBrewApi api)
         {
@@ -71,27 +71,29 @@ namespace DeckBrew.Mobile.Views
             }
         }
 
-        private async Task AnimatePress(Frame frame, Button button)
+        private async Task AnimatePress(View frame, Button button)
         {
             // Efecto de botón presionado: escala reducida, sin sombra, más opaco
             await Task.WhenAll(
-                frame.ScaleTo(0.9, 100, Easing.CubicOut),
-                button.ScaleTo(0.9, 100, Easing.CubicOut)
+                frame.ScaleToAsync(0.9, 100, Easing.CubicOut),
+                button.ScaleToAsync(0.9, 100, Easing.CubicOut)
             );
-            
-            frame.HasShadow = false;
+
+            //if (frame is Frame f)
+            //    f.HasShadow = false;
             button.Opacity = 0.7;
         }
 
-        private async Task AnimateUnpress(Frame frame, Button button)
+        private async Task AnimateUnpress(View frame, Button button)
         {
             // Efecto de botón no presionado: escala normal, con sombra, opacidad normal
             await Task.WhenAll(
-                frame.ScaleTo(1.0, 100, Easing.CubicOut),
-                button.ScaleTo(1.0, 100, Easing.CubicOut)
+                frame.ScaleToAsync(1.0, 100, Easing.CubicOut),
+                button.ScaleToAsync(1.0, 100, Easing.CubicOut)
             );
-            
-            frame.HasShadow = true;
+
+            //if (frame is Frame f)
+            //    f.HasShadow = true;
             button.Opacity = 1.0;
         }
 
@@ -102,7 +104,7 @@ namespace DeckBrew.Mobile.Views
                 // Validar que se haya seleccionado al menos un color
                 if (_selectedColors.Count == 0)
                 {
-                    await DisplayAlert("Error", "Debes seleccionar al menos un color", "OK");
+                    await DisplayAlertAsync("Error", "Debes seleccionar al menos un color", "OK");
                     return;
                 }
 
@@ -129,11 +131,11 @@ namespace DeckBrew.Mobile.Views
                     }
                 }
                 
-                await DisplayAlert("Éxito", $"Mazo generado con {Cards.Count} cartas", "OK");
+                await DisplayAlertAsync("Éxito", $"Mazo generado con {Cards.Count} cartas", "OK");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"No se pudo generar el mazo: {ex.Message}", "OK");
+                await DisplayAlertAsync("Error", $"No se pudo generar el mazo: {ex.Message}", "OK");
             }
         }
     }

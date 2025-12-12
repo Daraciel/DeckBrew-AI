@@ -18,15 +18,14 @@
       <Label Text="Selecciona colores:" FontAttributes="Bold"/>
       <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
         <!-- Blanco -->
-        <Frame x:Name="WhiteFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="WhiteFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="WhiteButton" 
                   StyleId="WhiteButton"
                   Text="W"
@@ -39,18 +38,17 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
 
         <!-- Azul -->
-        <Frame x:Name="BlueFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="BlueFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="BlueButton" 
                   StyleId="BlueButton"
                   Text="U"
@@ -63,18 +61,17 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
 
         <!-- Negro -->
-        <Frame x:Name="BlackFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="BlackFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="BlackButton" 
                   StyleId="BlackButton"
                   Text="B"
@@ -87,18 +84,17 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
 
         <!-- Rojo -->
-        <Frame x:Name="RedFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="RedFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="RedButton" 
                   StyleId="RedButton"
                   Text="R"
@@ -111,18 +107,17 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
 
         <!-- Verde -->
-        <Frame x:Name="GreenFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="GreenFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="GreenButton" 
                   StyleId="GreenButton"
                   Text="G"
@@ -135,18 +130,17 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
 
         <!-- Incoloro -->
-        <Frame x:Name="ColorlessFrame"
-               HasShadow="True"
-               CornerRadius="35"
-               Padding="0"
-               Margin="5"
-               HeightRequest="70"
-               WidthRequest="70"
-               BackgroundColor="Transparent"
-               BorderColor="Transparent">
+        <Border x:Name="ColorlessFrame"
+                StrokeShape="RoundRectangle 35"
+                StrokeThickness="0"
+                Margin="5"
+                HeightRequest="70"
+                WidthRequest="70"
+                BackgroundColor="Transparent"
+                Stroke="Transparent">
           <Button x:Name="ColorlessButton" 
                   StyleId="ColorlessButton"
                   Text="C"
@@ -159,7 +153,7 @@
                   CornerRadius="35"
                   Clicked="OnColorButtonClicked"
                   Padding="0"/>
-        </Frame>
+        </Border>
       </FlexLayout>
 
       <Picker x:Name="StylePicker" Title="Estilo">
